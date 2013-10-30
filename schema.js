@@ -1,5 +1,7 @@
-!(function() {
-	var schemas = {};
+!(function(exports) {
+	var schema = {
+		_handlers: {}
+	};
 	var ua = navigator.userAgent;
 	var platform = /ip(ad|od|hone)/i.test(ua) ? 'ios'
 		: /android/i.test(ua) ? 'android' : 'web';
@@ -25,12 +27,16 @@
 		};
 	};
 
-    this.register_schema = function(schema, fallbacks) {
-		var links = $('[href^="' + schema + '"]');
-		links.off('click').on('click', function(event) {
-			event.preventDefault();
-			var a = $(this);
-			var href = a.attr('href');
+	schema.register = function(protocol, fallbacks) {
+		var fn = function(event_or_url) {
+			var href = '';
+			if (typeof event_or_url === 'string') {
+				href = event_or_url;
+			} else {
+				event_or_url.preventDefault();
+				var a = $(this);
+				var href = a.attr('href');
+			}
 			var fallback = function() {
 				var components = parse_url(href);
 				var url, handler = fallbacks[platform];
@@ -58,6 +64,22 @@
 			} else if ('web' in fallbacks) {
 				fallback();
 			}
-		});
+		};
+		schema._handlers[protocol] = fn;
+		var pattern = '[href^="' + protocol + '"]';
+		$(document).off('click', pattern, fn)
+			.on('click', pattern, fn);
 	};
+
+	schema.navigate = function(url) {
+		for (var protocol in schema._handlers) {
+			if (url.substring(0, protocol.length) == protocol) {
+				schema._handlers[protocol](url);
+				return;
+			}
+		}
+	}
+
+	exports.schema = schema;
+	exports.register_schema = schema.register;
 })(this);
