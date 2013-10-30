@@ -13,7 +13,7 @@ Simply add `<script>` tag into your document's `<head>` tag.
 Now you can define your own schema or fallbacks by `register_schema` function.
 
     <script>
-    register_schema('github', {
+    schema.register('github', {
         'web': 'https://github.com/{host}{path}'
     });
     </script>
@@ -35,7 +35,7 @@ You can also define url handler by function.
         }
     }
 
-    register_schema('fb', {
+    schema.register('fb', {
         'ios': fb_url,
         'android': fb_url,
         'web': 'http://facebook.com'
@@ -51,7 +51,7 @@ to mobile web page urls.
 Or just promote to install native application.
 
     <script>
-    register_schema('fb', {
+    schema.register('fb', {
         'ios': 'http://itunes.apple.com/app/facebook/id284882215',
         'android': 'https://play.google.com/store/apps/details?id=com.facebook.katana'
     });
@@ -74,7 +74,7 @@ components are these:
 query arguments are replaced first if exists.
 
     <script>
-    register_schema('sms', {
+    schema.register('sms', {
         'web': 'mailto:?to=&subject={body}&body={body}'
     });
     </script>
@@ -87,9 +87,16 @@ that can not send sms message like desktop environment.
 Handler function accepts a parameter that contains url component object.
 
     <script>
-    register_schema('sms', {
+    schema.register('sms', {
         'web': function(url) {
             alert('Can not send sms to ' + url.host + '. [message:' + url.query.body + ']');
         }
     });
     </script>
+
+Now you can also navigate to your custom schema url via javascript.
+
+    <script>
+    schema.navigate('github://comfuture/schema.js');
+    </script>
+
