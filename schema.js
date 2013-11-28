@@ -5,14 +5,14 @@
 	var ua = navigator.userAgent;
 	var platform = schema.platform = /ip(ad|od|hone)/i.test(ua) ? 'ios'
 		: /android/i.test(ua) ? 'android'
-        : /Windows Phone/.test(ua) ? 'windows phone'
-        : 'desktop';
-    var browser = schema.browser = /Chrome/i.test(ua) ? 'chrome'
-        : /Firefox/i.test(ua) ? 'firefox'
-        : /Safari/i.test(ua) ? 'safari'
-        : /Opera/i.test(ua) ? 'opera'
-        : /MSIE|Trident/i.test(ua) ? 'iexplorer'
-        : 'other';
+		: /Windows Phone/i.test(ua) ? 'windows phone'
+		: 'desktop';
+	var browser = schema.browser = /Chrome/i.test(ua) ? 'chrome'
+		: /Firefox/i.test(ua) ? 'firefox'
+		: /Safari/i.test(ua) ? 'safari'
+		: /Opera/i.test(ua) ? 'opera'
+		: /MSIE|Trident/i.test(ua) ? 'iexplorer'
+		: 'other';
 
 	var parse_url = function(url) {
 		var pattern = /^(?=[^&])(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?/;
@@ -59,7 +59,7 @@
 				}
 				if (url) top.location.href = url;
 			};
-            var timer, iframe;
+			var timer, iframe;
 			if (platform == 'ios' && 'ios' in fallbacks) {
 				timer = setTimeout(function() {
 					fallback();
@@ -67,20 +67,20 @@
 				}, 35);
 				location.href = href;
 			} else if (platform == 'android' && 'android' in fallbacks) {
-                if (browser == 'chrome') {
-                    timer = setTimeout(function() {
-                        fallback();
-                        clearTimeout(timer);
-                    }, 1000);
-                } else {
-                    iframe = $('<iframe>')
-                        .attr('src', href)
-                        .hide().on('load', fallback).appendTo('body');
-                }
+				if (browser == 'chrome') {
+					timer = setTimeout(function() {
+						fallback();
+						clearTimeout(timer);
+					}, 1000);
+				} else {
+					iframe = $('<iframe>')
+						.attr('src', href)
+						.hide().on('load', fallback).appendTo('body');
+				}
 			} else {
-                if ('web' in fallbacks && !('desktop' in fallbacks)) {
-                    fallbacks['desktop'] = fallbacks['web'];
-                }
+				if ('web' in fallbacks && !('desktop' in fallbacks)) {
+					fallbacks['desktop'] = fallbacks['web'];
+				}
 				fallback();
 			}
 		};
