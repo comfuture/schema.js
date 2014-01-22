@@ -72,12 +72,15 @@
 						fallback();
 						clearTimeout(timer);
 					}, 1000);
+					location.href = href;
 				} else {
+					setTimeout(function() {
+						location.href = href;
+					}, 1000);
 					iframe = $('<iframe>')
 						.attr('src', href)
 						.hide().on('load', fallback).appendTo('body');
 				}
-				location.href = href;
 			} else {
 				if ('web' in fallbacks && !('desktop' in fallbacks)) {
 					fallbacks['desktop'] = fallbacks['web'];
